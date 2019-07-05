@@ -1,0 +1,35 @@
+#include "mbed.h"
+ 
+Ticker ticker;
+DigitalOut LED[] = {(PD_12),(PD_13),(PD_14)}; //PD_12 = verde ; PD_13 = laranja ; PD_14 = vermelho
+int estado = 0;
+ 
+void MudaEstado() // função que o valor de 'estado' variar de 0 a 2. Caso ultrapasse 2, ela força ele a voltar para o valor 0.
+    {
+        if (estado < 2) estado++;
+        
+        else estado = 0;
+    }
+ 
+int main() {
+    ticker.attach(&MudaEstado, 2); 
+    while(1) {
+            switch(estado)
+            {
+                case 0:
+                LED[0] = 1; //acende o led verde
+                LED[2] = 0; //apaga o led anterior (vermelho)
+                break;
+                
+                case 1:
+                LED[1] = 1; //acende o led laranja
+                LED[0] = 0; //apaga o led anterior (verde)
+                break;
+                
+                case 2:
+                LED[2] = 1; //acende o led vermelho
+                LED[1] = 0; //apaga o led anterior (laranja)
+                break;
+            }
+    }
+}
